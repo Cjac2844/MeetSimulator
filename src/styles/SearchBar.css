@@ -1,0 +1,16 @@
+.front-desk-card {
+  border: none;
+}
+
+.front-desk-title {
+  font-size: 1.75rem;
+}
+
+.attendance-text {
+  color: #5f6368;
+  margin-bottom: 1rem;
+}
+
+.selectable-row {
+  cursor: pointer;
+}
