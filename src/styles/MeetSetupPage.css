@@ -1,0 +1,163 @@
+.meet-setup-page {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.setup-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.setup-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  letter-spacing: -0.5px;
+  margin-bottom: 0.5rem;
+}
+
+.setup-subtitle {
+  font-size: 1.1rem;
+  color: #6c757d;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Team Cards */
+.team-card {
+  border: none;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+  height: 100%;
+}
+
+.team-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.team-card.home-team-card {
+  border-top: 4px solid #1e90ff;
+}
+
+.team-card.away-team-card {
+  border-top: 4px solid #ff6b6b;
+}
+
+/* Team Labels */
+.team-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 1.5rem;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
+.home-label {
+  background-color: #e7f5ff;
+  color: #1971c2;
+}
+
+.away-label {
+  background-color: #ffe7e7;
+  color: #c92a2a;
+}
+
+/* Form Styling */
+.form-label {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+}
+
+.form-control {
+  border-radius: 0.5rem;
+  border: 1px solid #dee2e6;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.form-control:focus {
+  border-color: #1e90ff;
+  box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.1);
+}
+
+.form-control.is-invalid:focus {
+  border-color: #ff6b6b;
+  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+}
+
+.form-control::placeholder {
+  color: #adb5bd;
+}
+
+.form-text {
+  font-size: 0.85rem;
+}
+
+/* Start Button */
+.start-button {
+  padding: 0.875rem 3rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  background: linear-gradient(135deg, #1e90ff 0%, #1571cc 100%);
+  border: none;
+  border-radius: 0.5rem;
+  color: white;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(30, 144, 255, 0.3);
+}
+
+.start-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #1571cc 0%, #0f5fa8 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(30, 144, 255, 0.4);
+  color: white;
+}
+
+.start-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.start-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .setup-title {
+    font-size: 2rem;
+  }
+
+  .setup-subtitle {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .meet-setup-page {
+    padding: 1rem;
+  }
+
+  .setup-title {
+    font-size: 1.75rem;
+  }
+
+  .setup-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .start-button {
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+  }
+}
