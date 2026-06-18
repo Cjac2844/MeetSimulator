@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Container, Button, Card } from 'react-bootstrap';
+import { Container, Button, Card, Form, InputGroup, Row, Col } from 'react-bootstrap';
 import { TeamSetup, MeetState, EventData, LaneEntry, EventResult } from '../types/MeetTypes';
 import LaneInputRow from './LaneInputRow';
 import EventResults from './EventResults';
 import Scoreboard from './Scoreboard';
+import ExportButton from './ExportButton';   // ← New import
 
 interface MeetSimulatorProps {
   homeTeam: TeamSetup;
@@ -113,6 +114,13 @@ const MeetSimulator: React.FC<MeetSimulatorProps> = ({
 
   const currentEvent = meetState.events[meetState.currentEventIndex];
 
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const filteredEvents = meetState.events.filter(event =>
+    event.eventNumber.toString().includes(searchTerm) ||
+    event.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   const normalizeTime = (timeStr: string): string => timeStr.trim().toUpperCase();
 
   const timeToSeconds = (timeStr: string): number => {
@@ -151,9 +159,8 @@ const MeetSimulator: React.FC<MeetSimulatorProps> = ({
       let points = 0;
 
       if (!dq) {
-        if (isRelay) {
-          points = place === 1 ? 7 : 0;
-        } else {
+        if (isRelay) points = place === 1 ? 7 : 0;
+        else {
           if (place === 1) points = 5;
           else if (place === 2) points = 3;
           else if (place === 3) points = 1;
@@ -181,7 +188,6 @@ const MeetSimulator: React.FC<MeetSimulatorProps> = ({
     setMeetState(prev => {
       const newEvents = [...prev.events];
       newEvents[prev.currentEventIndex] = { ...currentEvent, results };
-
       return {
         ...prev,
         events: newEvents,
@@ -194,7 +200,6 @@ const MeetSimulator: React.FC<MeetSimulatorProps> = ({
   const editCurrentEvent = () => {
     if (!currentEvent.results) return;
 
-    // Subtract current event points from total score
     let homePointsToRemove = 0;
     let awayPointsToRemove = 0;
 
@@ -205,10 +210,7 @@ const MeetSimulator: React.FC<MeetSimulatorProps> = ({
 
     setMeetState(prev => {
       const newEvents = [...prev.events];
-      newEvents[prev.currentEventIndex] = {
-        ...newEvents[prev.currentEventIndex],
-        results: undefined,   // Clear results so inputs become editable
-      };
+      newEvents[prev.currentEventIndex] = { ...newEvents[prev.currentEventIndex], results: undefined };
 
       return {
         ...prev,
@@ -258,6 +260,7 @@ const MeetSimulator: React.FC<MeetSimulatorProps> = ({
   const goToEvent = (index: number) => {
     if (index >= 0 && index < TOTAL_EVENTS) {
       setMeetState(prev => ({ ...prev, currentEventIndex: index }));
+      setSearchTerm('');
     }
   };
 
@@ -293,6 +296,36 @@ const MeetSimulator: React.FC<MeetSimulatorProps> = ({
           homeScore={meetState.homeScore}
           awayScore={meetState.awayScore}
         />
+
+        {/* Quick Jump Navigation */}
+        <Card className="mb-4">
+          <Card.Body>
+            <Row className="align-items-center">
+              <Col md={7}>
+                <InputGroup>
+                  <InputGroup.Text>🔍</InputGroup.Text>
+                  <Form.Control
+                    placeholder="Search event number or keyword (e.g. Butterfly, 11-12, Breaststroke)"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </InputGroup>
+              </Col>
+              <Col md={5}>
+                <Form.Select 
+                  onChange={(e) => goToEvent(parseInt(e.target.value) - 1)}
+                  value={currentEvent.eventNumber}
+                >
+                  {filteredEvents.map(event => (
+                    <option key={event.eventNumber} value={event.eventNumber}>
+                      {event.eventNumber}: {event.title}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Col>
+            </Row>
+          </Card.Body>
+        </Card>
 
         <Card className="mb-4">
           <Card.Body>
@@ -344,6 +377,13 @@ const MeetSimulator: React.FC<MeetSimulatorProps> = ({
             >
               Reset Event
             </Button>
+
+            {/* Export Button */}
+            <ExportButton 
+              meetState={meetState} 
+              homeTeam={homeTeam} 
+              awayTeam={awayTeam} 
+            />
           </Card.Footer>
         </Card>
 
@@ -360,7 +400,7 @@ const MeetSimulator: React.FC<MeetSimulatorProps> = ({
             onClick={prevEvent}
             disabled={meetState.currentEventIndex === 0}
           >
-            ← Previous Event
+            ← Previous
           </Button>
           
           <div className="d-flex gap-2">
@@ -377,7 +417,7 @@ const MeetSimulator: React.FC<MeetSimulatorProps> = ({
             onClick={nextEvent}
             disabled={meetState.currentEventIndex === TOTAL_EVENTS - 1}
           >
-            Next Event →
+            Next →
           </Button>
         </div>
       </Container>
